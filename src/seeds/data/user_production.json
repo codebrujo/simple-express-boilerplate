@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "isActive": true,
+      "name": "Otlichny group",
+      "role": "admin",
+      "authToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjE5IiwieC1yZWciOiJTSU0iLCJ4LWVudiI6IlBSRCJ9.eyJzdWIiOjE3NzMwLCJleHAiOjE2MzEwMTkzOTEsInNjb3BlIjpbIklkZW50aWZ5QXBwbGlhbmNlIiwiRGlzaHdhc2hlciIsIk1vbml0b3IiXSwiYXpwIjoiNDA1RDA4MjkxQTdBNUYxNTQ2RDkzNDFFMEFGNjVFMzQ2RjQ3QzQ2ODY0RTY3N0VEOEVBOEM2RkE4QzI1NEJDNCIsImF1ZCI6IjQwNUQwODI5MUE3QTVGMTU0NkQ5MzQxRTBBRjY1RTM0NkY0N0M0Njg2NEU2NzdFRDhFQThDNkZBOEMyNTRCQzQiLCJwcm0iOltdLCJpc3MiOiJldTpzaW06b2F1dGg6MSIsImp0aSI6IjhmZjZhNDRmLWY1MjctNGJlMC05MWZjLTYyZTUxM2NkMGViOSIsImlhdCI6MTYzMDkzMjk5MX0.SH-iGH7ytnB3DzhS_mbtWd27VrUjDOONpkO7x52zxFTomg4x9zGB7dz1GBeU7fLqMHC0vMSbhr0g5zCWxalIHw",
+      "properties": {}
+    }
+  ]
+}
