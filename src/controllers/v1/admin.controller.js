@@ -94,3 +94,7 @@ exports.getUserDetails = async (req, res, next) => {
 exports.patchUser = async (req, res, next) => {
   res.json(await service.updateUser(req.locals.requestUser, req.body));
 };
+
+exports.me = async (req, res, next) => {
+  res.json(req.user);
+};

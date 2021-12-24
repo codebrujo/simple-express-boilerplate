@@ -1,11 +1,6 @@
 const express = require('express');
-const { validate } = require('express-validation');
 const controller = require('../../controllers/v1/admin.controller');
-const {
-  checkAuthorization,
-  ADMIN,
-  checkRole,
-} = require('../../middlewares/auth');
+const { authorize, ADMIN, checkRole } = require('../../middlewares/auth');
 
 const router = express.Router();
 
@@ -29,7 +24,24 @@ router
    * @apiError (Unauthorized 401)  Unauthorized           Only authenticated users can access the data
    * @apiError (Unauthorized 403)  Forbidden              Only admins can access the data
    */
-  .get(checkAuthorization, checkRole(ADMIN), controller.get);
+  .get(authorize, checkRole(ADMIN), controller.get);
+
+router
+  .route('/me')
+  /**
+   * @api {get} v1/admin/me                               Get current user
+   * @apiDescription Get current user
+   * @apiVersion 1.0.0
+   * @apiName Me
+   * @apiGroup Admin
+   * @apiPermission user
+   *
+   * @apiSuccess {User}
+   *
+   * @apiError (Unauthorized 401) Unauthorized            Only authenticated users can access the data
+   */
+  .get(authorize, controller.me);
+
 
 router
   .route('/users')
@@ -46,7 +58,7 @@ router
    * @apiError (Unauthorized 401) Unauthorized            Only authenticated users can access the data
    * @apiError (Unauthorized 403) Forbidden               Only admins can access the data
    */
-  .get(checkAuthorization, checkRole(ADMIN), controller.getUsers);
+  .get(authorize, checkRole(ADMIN), controller.getUsers);
 
 router
   .route('/users/:userId')
@@ -64,7 +76,7 @@ router
    * @apiError (Unauthorized 403) Forbidden               Only admins can access the data
    * @apiError (Not Found 404)    NotFound                User does not exist
    */
-  .get(checkAuthorization, checkRole(ADMIN), controller.getUserDetails)
+  .get(authorize, checkRole(ADMIN), controller.getUserDetails)
   /**
    * @api {patch} v1/admin/users/:userId                  Change user data
    * @apiDescription Change given user data
@@ -85,6 +97,6 @@ router
    * @apiError (Unauthorized 403) Forbidden               Only admins can access the endpoint
    * @apiError (Not Found 404)    NotFound                User does not exist
    */
-  .patch(checkAuthorization, checkRole(ADMIN), controller.patchUser);
+  .patch(authorize, checkRole(ADMIN), controller.patchUser);
 
 module.exports = router;

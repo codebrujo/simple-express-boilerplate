@@ -27,19 +27,6 @@ function getModuleError(initError, message, fnName, res, status, stack) {
   return e;
 }
 
-exports.authorize = async (role = LOGGED_USER) => {
-  return (req, res, next) => {
-    const response = getUserAuthStatus(req.user);
-    if (response.authStatus) {
-      return next();
-    } else {
-      res.status(httpStatus.UNAUTHORIZED);
-      res.json(response);
-      return;
-    }
-  };
-};
-
 exports.checkRole = (role) => {
   return (req, res, next) => {
     const { user } = req;
@@ -80,33 +67,36 @@ exports.checkRole = (role) => {
   };
 };
 
-exports.checkAuthorization = async (req, res, next) => {
-  //if (isSessionDisabled) {
-    // res.status(httpStatus.OK);
-    // const [user] = await User.findOrCreate({
-    //   where: {
-    //     id: 1,
-    //   },
-    //   defaults: {
-    //     isActive: true,
-    //     properties: await User.getDefaultProperties(),
-    //     subscriptionDetails: {},
-    //     role: User.getRoles()[0],
-    //     oauthId: mockUserDefaults.oauthId,
-    //     oauthToken: mockUserDefaults.oauthToken,
-    //     oauthTokenExp: mockUserDefaults.oauthTokenExp,
-    //     oauthRefreshToken: mockUserDefaults.oauthRefreshToken,
-    //   },
-    // });
-    // req.user = user;
-    // return next();
-  //}
-  const response = getUserAuthStatus(req.user);
-  if (response.authStatus) {
+exports.authorize = async (req, res, next) => {
+  const authToken = (req.header('Authorization') || '').replace('Bearer ', '');
+  try {
+    if (!authToken)
+      throw getModuleError(
+        null,
+        'Empty token',
+        'authorize',
+        res,
+        httpStatus.UNAUTHORIZED
+      );
+    const user = await User.findOne({
+      where: {
+        authToken,
+      },
+    });
+    if (!user)
+      throw getModuleError(
+        null,
+        'No user found',
+        'authorize',
+        res,
+        httpStatus.UNAUTHORIZED
+      );
+    req.user = user;
+    console.log(user);
     return next();
-  } else {
-    res.status(httpStatus.UNAUTHORIZED);
-    res.json(response);
+  } catch (error) {
+    logger.error(error);
+    res.status(httpStatus.UNAUTHORIZED).end();
     return;
   }
 };
