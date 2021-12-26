@@ -5,11 +5,22 @@ const {
   messageTypes,
 } = require('../../config/worker');
 const { newMessage } = require('../../utils/workersMessage');
+const { aliveTime } = require('../../config/worker');
 
 const THIS_THREAD_ID = workerData.workerId;
 const rootWorkerId = workerData.owner;
 
+const intervals = [];
+
+const clearIntervals = () => {
+  intervals.forEach((interval) => {
+    clearInterval(interval);
+  });
+  intervals.splice(0, intervals.length);
+};
+
 const processExit = () => {
+  clearIntervals();
   process.exit(0);
 }
 
@@ -80,6 +91,8 @@ parentPort.on('message', (msg) => {
 
 sendMessage(`Worker ${THIS_THREAD_ID} started`);
 
-setInterval(() => {
-  sendMessage(`Worker ${THIS_THREAD_ID} is running`, messageTypes.keepAlive);
-}, 3000);
+intervals.push(
+  setInterval(() => {
+    sendMessage(`Worker ${THIS_THREAD_ID} is running`, messageTypes.keepAlive);
+  }, aliveTime / 2)
+);
