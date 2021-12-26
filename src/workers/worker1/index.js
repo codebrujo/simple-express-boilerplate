@@ -6,6 +6,7 @@ const {
 } = require('../../config/worker');
 const { newMessage } = require('../../utils/workersMessage');
 const { aliveTime } = require('../../config/worker');
+const { runPeriod } = require('./worker.config');
 
 const THIS_THREAD_ID = workerData.workerId;
 const rootWorkerId = workerData.owner;
@@ -28,14 +29,14 @@ const processExit = () => {
 * Worker entry point
 */
 const run = () => {
-
+  logger.info('Run worker');
 }
 
 /**
-* Worker entry point
+* Log message
 */
 const logMessage = (msg) => {
-  logger.info(msg.data)
+  logger.info(msg.data);
 };
 
 /**
@@ -95,4 +96,10 @@ intervals.push(
   setInterval(() => {
     sendMessage(`Worker ${THIS_THREAD_ID} is running`, messageTypes.keepAlive);
   }, aliveTime / 2)
+);
+
+intervals.push(
+  setInterval(() => {
+    run();
+  }, runPeriod)
 );
