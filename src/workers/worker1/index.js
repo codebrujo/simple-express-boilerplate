@@ -92,6 +92,8 @@ parentPort.on('message', (msg) => {
 
 sendMessage(`Worker ${THIS_THREAD_ID} started`);
 
+run();
+
 intervals.push(
   setInterval(() => {
     sendMessage(`Worker ${THIS_THREAD_ID} is running`, messageTypes.keepAlive);
